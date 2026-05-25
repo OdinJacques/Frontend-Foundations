@@ -6,7 +6,6 @@ const VALID_USER = "standard_user";
 const VALID_PASS = "secret_sauce";
 
 test.describe("Login", () => {
-  //Happy path tests
   let loginPage: LoginPage;
 
   test.beforeEach(async ({ page }) => {
@@ -28,54 +27,48 @@ test.describe("Login", () => {
   test("Standard user should redirect to /inventory.html", async ({ page }) => {
     await loginPage.login(VALID_USER, VALID_PASS);
     await expect(page).toHaveURL(/.*inventory/);
-    await expect(page.getByText("Products")).toBeVisible();
+    await expect(page.locator(".title")).toHaveText("Products");
   });
 
-  test('problem_user should login but show broken images', async ({ page }) => {
-  await loginPage.login('problem_user', VALID_PASS);
-  await expect(page).toHaveURL(/.*inventory/);
-  await expect(
-    page.locator('.inventory_item').first()
-  ).toBeVisible();
+  test("problem_user should login but show broken images", async ({ page }) => {
+    await loginPage.login("problem_user", VALID_PASS);
+    await expect(page).toHaveURL(/.*inventory/);
+    await expect(page.getByTestId("inventory-item").first()).toBeVisible();
 
-  const inventoryPage = new InventoryPage(page);
-  const productNames = await inventoryPage.getProductNames();
-  const productPrices = await inventoryPage.getProductPrices();
+    const inventoryPage = new InventoryPage(page);
+    const productNames = await inventoryPage.getProductNames();
+    const productPrices = await inventoryPage.getProductPrices();
 
-  expect(productNames.length).toBeGreaterThan(0);
-  expect(productPrices.length).toBeGreaterThan(0);
+    expect(productNames.length).toBeGreaterThan(0);
+    expect(productPrices.length).toBeGreaterThan(0);
 
-  const brokenImages = page.locator(
-    '.inventory_item_img img[src*=\"sl-404\"]'
-  );
+    const brokenImages = page.locator('.inventory_item_img img[src*="sl-404"]');
+    await expect(brokenImages).toHaveCount(productNames.length);
+  });
 
-  await expect(brokenImages).toHaveCount(productNames.length);
-});
-
-  test('Performance glitch user should login but with a delay', async ({ page }) => {
+  test("Performance glitch user should login but with a delay", async ({
+    page,
+  }) => {
     const start = Date.now();
     await loginPage.login("performance_glitch_user", VALID_PASS);
     await expect(page).toHaveURL(/.*inventory/);
-    const end = Date.now();
-    const duration = end - start;
+    const duration = Date.now() - start;
     console.log(`Login took ${duration} ms`);
-    expect(duration).toBeGreaterThan(4000); // Assuming the glitch causes a delay of at least 4 seconds
+    expect(duration).toBeGreaterThan(4000);
   });
 
-  test('error_user should be able to login', async ({ page }) => {
-    await loginPage.login('error_user', VALID_PASS);
+  test("error_user should be able to login", async ({ page }) => {
+    await loginPage.login("error_user", VALID_PASS);
     await expect(page).toHaveURL(/.*inventory/);
   });
 
-  test('visual_user should be able to login', async ({ page }) => {
-    await loginPage.login('visual_user', VALID_PASS);
+  test("visual_user should be able to login", async ({ page }) => {
+    await loginPage.login("visual_user", VALID_PASS);
     await expect(page).toHaveURL(/.*inventory/);
   });
-
 });
 
 test.describe("Error states", () => {
-  //Unhappy path tests
   let loginPage: LoginPage;
 
   test.beforeEach(async ({ page }) => {
@@ -89,19 +82,19 @@ test.describe("Error states", () => {
     expect(error).toContain("Sorry, this user has been locked out");
   });
 
-  test("Wrong passwords should shor credentials mismatch error", async () => {
+  test("Wrong password should show credentials mismatch error", async () => {
     await loginPage.login(VALID_USER, "Wrong_Password");
     const error = await loginPage.getErrorMessage();
     expect(error).toContain("Username and password do not match");
   });
 
-  test("both fields empty should show username-required error", async () => {
+  test("Both fields empty should show username-required error", async () => {
     await loginPage.login("", "");
     const error = await loginPage.getErrorMessage();
     expect(error).toContain("Username is required");
   });
 
-  test("unknown username should show credentials mismatch error", async () => {
+  test("Unknown username should show credentials mismatch error", async () => {
     await loginPage.login("nouser", VALID_PASS);
     const error = await loginPage.getErrorMessage();
     expect(error).toContain(
@@ -125,7 +118,7 @@ test.describe("Logout", () => {
     await expect(loginPage.loginButton).toBeVisible();
   });
 
-  test("should not access inventory page after logout", async ({ page }) => {
+  test("Should not access inventory page after logout", async ({ page }) => {
     await loginPage.login(VALID_USER, VALID_PASS);
     await loginPage.logout();
     await page.goto("https://www.saucedemo.com/inventory.html");
