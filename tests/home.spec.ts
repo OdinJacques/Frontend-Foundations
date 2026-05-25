@@ -5,13 +5,6 @@ import { InventoryPage } from '../pages/inventoryPage';
 const VALID_USER = 'standard_user';
 const VALID_PASS = 'secret_sauce';
 
-/*
-All tests passed in a reasonable time frame, with no flakiness observed.
-(180 seconds on average for the whole suite, with 72 seconds for Home / inventory path,
-85 seconds for burguer menu and 20 seconds for sorting tests)
-*/
-
-//Home and Inventory page tests, all passed in 72 seconds on average
 test.describe('Home / Inventory Page', () => {
   let inventoryPage: InventoryPage;
 
@@ -113,7 +106,7 @@ test.describe('Home / Inventory Page', () => {
   });
 });
 
-//Burguer menu tests, all passed in 85 seconds on average
+
 test.describe('Burguer menu', () => {
   let inventoryPage: InventoryPage;
 
@@ -184,7 +177,7 @@ test.describe('Burguer menu', () => {
   });
 });
 
-//Sorting tests, all passed in 20 seconds on average
+
 test.describe('Sorting products', () => {
   let inventoryPage: InventoryPage;
 
