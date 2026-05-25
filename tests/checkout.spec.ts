@@ -29,75 +29,66 @@ test.describe("Checkout Flow", () => {
 
   test("user should complete purchase successfully", async ({ page }) => {
     await inventoryPage.addProductToCartByIndex(0);
- 
     await expect(inventoryPage.cartBadge).toHaveText("1");
- 
     await inventoryPage.goToCart();
     await expect(page).toHaveURL(/cart/);
     await expect(cartPage.cartItems).toHaveCount(1);
- 
     await cartPage.proceedToCheckout();
     await expect(page).toHaveURL(/checkout-step-one/);
- 
-    await checkoutPage.fillCheckoutInformation("Alexander", "Bocanegra", "12345");
+    await checkoutPage.fillCheckoutInformation(
+      "Alexander",
+      "Bocanegra",
+      "12345",
+    );
     await checkoutPage.continueCheckout();
- 
     await expect(page).toHaveURL(/checkout-step-two/);
-    await expect(page.locator(".title")).toBeVisible();
- 
+    await expect(checkoutPage.pageTitle).toHaveText("Checkout: Overview");
     await checkoutPage.finishCheckout();
     await expect(page).toHaveURL(/checkout-complete/);
- 
-    await expect(checkoutPage.completeHeader).toHaveText("Thank you for your order!");
-    await expect(checkoutPage.completeText).toContainText("Your order has been dispatched");
- 
+    await expect(checkoutPage.completeHeader).toHaveText(
+      "Thank you for your order!",
+    );
+    await expect(checkoutPage.completeText).toContainText(
+      "Your order has been dispatched",
+    );
     await checkoutPage.backHome();
     await expect(page).toHaveURL(/inventory/);
- 
     await expect(inventoryPage.pageTitle).toHaveText("Products");
     await expect(inventoryPage.cartBadge).not.toBeVisible();
   });
- 
- 
+
   test("should show error when first name is missing", async ({ page }) => {
     await inventoryPage.addProductToCartByIndex(0);
     await inventoryPage.goToCart();
     await cartPage.proceedToCheckout();
- 
     await checkoutPage.fillCheckoutInformation("", "Lastname", "12345");
     await checkoutPage.continueCheckout();
- 
-    // getByTestId('error') — rank-1
     await expect(page.getByTestId("error")).toHaveText(
-      "Error: First Name is required"
+      "Error: First Name is required",
     );
     await expect(page).toHaveURL(/checkout-step-one/);
   });
- 
+
   test("should show error when last name is missing", async ({ page }) => {
     await inventoryPage.addProductToCartByIndex(0);
     await inventoryPage.goToCart();
     await cartPage.proceedToCheckout();
- 
     await checkoutPage.fillCheckoutInformation("Firstname", "", "12345");
     await checkoutPage.continueCheckout();
- 
     await expect(page.getByTestId("error")).toHaveText(
-      "Error: Last Name is required"
+      "Error: Last Name is required",
     );
     await expect(page).toHaveURL(/checkout-step-one/);
   });
- 
+
   test("should show error when postal code is missing", async ({ page }) => {
     await inventoryPage.addProductToCartByIndex(0);
     await inventoryPage.goToCart();
     await cartPage.proceedToCheckout();
- 
     await checkoutPage.fillCheckoutInformation("Firstname", "Lastname", "");
     await checkoutPage.continueCheckout();
- 
     await expect(page.getByTestId("error")).toHaveText(
-      "Error: Postal Code is required"
+      "Error: Postal Code is required",
     );
     await expect(page).toHaveURL(/checkout-step-one/);
   });

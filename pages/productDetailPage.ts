@@ -13,16 +13,14 @@ export class ProductDetailPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.productName = page.locator(".inventory_details_name");
-    this.productDescription = page.locator(".inventory_details_desc");
-    this.productPrice = page.locator(".inventory_details_price");
+    this.productName = page.getByTestId("inventory-item-name");
+    this.productDescription = page.getByTestId("inventory-item-desc");
+    this.productPrice = page.getByTestId("inventory-item-price");
     this.productImage = page.locator(".inventory_details_img");
-    this.addToCartButton = page.locator('button[data-test^="add-to-cart"]');
-    this.removeButton = page.locator('button[data-test^="remove"]');
-    this.backToProductsButton = page.locator(
-      'button[data-test="back-to-products"]',
-    );
-    this.cartBadge = page.locator(".shopping_cart_badge");
+    this.addToCartButton = page.locator('[data-test^="add-to-cart"]');
+    this.removeButton = page.locator('[data-test^="remove"]');
+    this.backToProductsButton = page.getByTestId("back-to-products");
+    this.cartBadge = page.getByTestId("shopping-cart-badge");
   }
 
   async goToById(id: number) {
@@ -54,7 +52,7 @@ export class ProductDetailPage extends BasePage {
   }
 
   async getCartCount(): Promise<number> {
-    if(await this.cartBadge.count() === 0) return 0;
+    if ((await this.cartBadge.count()) === 0) return 0;
     const text = await this.cartBadge.textContent();
     return text ? parseInt(text) : 0;
   }

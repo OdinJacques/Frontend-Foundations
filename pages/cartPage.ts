@@ -10,13 +10,12 @@ export class CartPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-
-    this.cartItems = page.locator(".cart_item");
-    this.checkoutButton = page.locator('button[data-test="checkout"]');
-    this.continueShoppingButton = page.locator(
-      'button[data-test="continue-shopping"]',
+    this.checkoutButton = page.getByTestId("checkout");
+    this.continueShoppingButton = page.getByTestId("continue-shopping");
+    this.removeButtons = page.locator('[data-test^="remove"]');
+    this.cartItems = page.locator(
+      '[data-test="cart-contents-container"] .cart_item',
     );
-    this.removeButtons = page.locator('button[data-test^="remove"]');
     this.pageTitle = page.locator(".title");
   }
 
@@ -29,12 +28,12 @@ export class CartPage extends BasePage {
   }
 
   async getItemNames(): Promise<string[]> {
-    return this.page.locator(".inventory_item_name").allTextContents();
+    return this.page.getByTestId("inventory-item-name").allTextContents();
   }
 
   async getItemPrices(): Promise<string[]> {
     const raw = await this.page
-      .locator(".inventory_item_price")
+      .getByTestId("inventory-item-price")
       .allTextContents();
     return raw.map((price) => price.replace("$", ""));
   }
@@ -46,7 +45,7 @@ export class CartPage extends BasePage {
 
   async removeItemByName(name: string) {
     const slug = name.toLowerCase().replace(/\s+/g, "-");
-    await this.page.locator(`button[data-test="remove-${slug}"]`).click();
+    await this.page.getByTestId(`remove-${slug}`).click();
   }
 
   async proceedToCheckout() {
