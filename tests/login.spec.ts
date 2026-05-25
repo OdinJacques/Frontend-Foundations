@@ -5,13 +5,6 @@ import { InventoryPage } from "../pages/inventoryPage";
 const VALID_USER = "standard_user";
 const VALID_PASS = "secret_sauce";
 
-/* 
-All tests passed in a reasonable time frame, with no flakiness observed. 
-(79 seconds on average for the whole suite, with 37 seconds for happy paths, 
-20 seconds for error states and 22 seconds for logout tests)
-*/
-
-//Happy path tests, all passed in 37 seconds on average
 test.describe("Login", () => {
   //Happy path tests
   let loginPage: LoginPage;
@@ -81,7 +74,6 @@ test.describe("Login", () => {
 
 });
 
-//Unhappy path tests, all passed in 20 seconds on average
 test.describe("Error states", () => {
   //Unhappy path tests
   let loginPage: LoginPage;
@@ -118,7 +110,6 @@ test.describe("Error states", () => {
   });
 });
 
-//Logout path tests, all passed in 22 seconds on average
 test.describe("Logout", () => {
   let loginPage: LoginPage;
 

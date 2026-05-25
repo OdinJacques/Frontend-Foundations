@@ -20,7 +20,7 @@ export class BasePage {
  
   async closeBurgerMenu() {
     await this.page.getByRole('button', { name: 'Close Menu '}).click();
-    await this.page.getByRole('navigation').waitFor({ state: 'hidden' });
+    await this.page.locator('.bm-menu-wrap').waitFor({ state: 'hidden' });
   }
  
   async logout() {
