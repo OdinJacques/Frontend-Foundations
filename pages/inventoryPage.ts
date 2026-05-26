@@ -1,5 +1,6 @@
-import { Page, Locator } from "@playwright/test";
-import { BasePage } from "./basePage";
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './basePage';
+import { inventoryPageLocators } from '../locators/inventoryPage.locators';
 
 export class InventoryPage extends BasePage {
   readonly productList: Locator;
@@ -10,46 +11,57 @@ export class InventoryPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.productList = page.getByTestId("inventory-item");
-    this.sortDropdown = page.getByTestId("product-sort-container");
-    this.cartBadge = page.getByTestId("shopping-cart-badge");
-    this.cartIcon = page.getByTestId("shopping-cart-link");
-    this.pageTitle = page.locator(".title");
+    this.productList = page.locator(inventoryPageLocators.productList);
+    this.sortDropdown = page.locator(inventoryPageLocators.sortDropdown);
+    this.cartBadge = page.locator(inventoryPageLocators.cartBadge);
+    this.cartIcon = page.locator(inventoryPageLocators.cartIcon);
+    this.pageTitle = page.locator(inventoryPageLocators.pageTitle);
   }
 
   async goto() {
-    await this.navigate("/inventory.html");
+    await this.navigate('/inventory.html');
   }
 
   async getProductNames(): Promise<string[]> {
-    return this.page.getByTestId("inventory-item-name").allTextContents();
+    return this.page
+      .locator(inventoryPageLocators.productName)
+      .allTextContents();
   }
 
   async getProductPrices(): Promise<number[]> {
     const raw = await this.page
-      .getByTestId("inventory-item-price")
+      .locator(inventoryPageLocators.productPrice)
       .allTextContents();
-    return raw.map((p) => parseFloat(p.replace("$", "")));
+    return raw.map((p) => parseFloat(p.replace('$', '')));
   }
 
   async addProductToCartByIndex(index: number) {
-    await this.page.locator('[data-test^="add-to-cart"]').nth(index).click();
+    await this.page
+      .locator(inventoryPageLocators.addToCartButtons)
+      .nth(index)
+      .click();
   }
 
   async removeProductFromCartByIndex(index: number) {
-    await this.page.locator('[data-test^="remove"]').nth(index).click();
+    await this.page
+      .locator(inventoryPageLocators.removeButtons)
+      .nth(index)
+      .click();
   }
 
   async addProductToCartByName(name: string) {
-    const slug = name.toLowerCase().replace(/ /g, "-");
-    await this.page.getByTestId(`add-to-cart-${slug}`).click();
+    const slug = name.toLowerCase().replace(/ /g, '-');
+    await this.page.locator(`[data-test="add-to-cart-${slug}"]`).click();
   }
 
   async clickProductByIndex(index: number) {
-    await this.page.getByTestId("inventory-item-name").nth(index).click();
+    await this.page
+      .locator(inventoryPageLocators.productName)
+      .nth(index)
+      .click();
   }
 
-  async sortBy(option: "az" | "za" | "lohi" | "hilo") {
+  async sortBy(option: 'az' | 'za' | 'lohi' | 'hilo') {
     await this.sortDropdown.selectOption(option);
   }
 

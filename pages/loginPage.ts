@@ -1,5 +1,6 @@
-import { Page, Locator } from "@playwright/test";
-import { BasePage } from "./basePage";
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './basePage';
+import { loginPageLocators } from '../locators/loginPage.locators';
 
 export class LoginPage extends BasePage {
   readonly usernameInput: Locator;
@@ -9,14 +10,14 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.usernameInput = page.getByTestId("username");
-    this.passwordInput = page.getByTestId("password");
-    this.loginButton = page.getByRole("button", { name: "Login" });
-    this.errorMessage = page.getByTestId("error");
+    this.usernameInput = page.locator(loginPageLocators.usernameInput);
+    this.passwordInput = page.locator(loginPageLocators.passwordInput);
+    this.loginButton = page.locator(loginPageLocators.loginButton);
+    this.errorMessage = page.locator(loginPageLocators.errorMessage);
   }
 
   async goto() {
-    await this.navigate("/");
+    await this.navigate('/');
   }
 
   async login(username: string, password: string) {
@@ -27,10 +28,10 @@ export class LoginPage extends BasePage {
 
   async logout() {
     await this.openBurgerMenu();
-    await this.page.getByRole("link", { name: "Logout" }).click();
+    await this.logoutLink.click();
   }
 
   async getErrorMessage(): Promise<string> {
-    return (await this.errorMessage.textContent()) ?? "";
+    return (await this.errorMessage.textContent()) ?? '';
   }
 }
