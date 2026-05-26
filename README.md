@@ -1,8 +1,6 @@
-> [!NOTE]
-> This project is still being actively worked on. Once it reaches a more finalized version, the `README.md` file will be updated to reflect the latest architecture, features, and framework improvements.
 # Frontend Foundations
 
-A modern Front-End Automation Testing framework built with Playwright, TypeScript, and the Page Object Model (POM) architecture.
+A modern Front-End Automation Testing framework built with Playwright, TypeScript, and scalable automation architecture principles.
 
 This project represents my growing expertise in Front-End Quality Engineering and UI automation, focusing on:
 
@@ -12,6 +10,7 @@ This project represents my growing expertise in Front-End Quality Engineering an
 - reliable end-to-end testing
 - clean TypeScript implementation
 - reusable Page Object Models
+- centralized locator management
 - modern QE best practices
 
 ---
@@ -32,7 +31,7 @@ The main purpose of this repository is to demonstrate my practical knowledge in:
 - Cross-browser testing
 - Automation best practices
 
-This project is continuously evolving as I keep learning and improving my QA Engineering skills.
+This project continuously evolves as I improve my QA Engineering and automation architecture skills.
 
 ---
 
@@ -44,6 +43,7 @@ This project is continuously evolving as I keep learning and improving my QA Eng
 | Playwright | End-to-End automation |
 | Node.js | Runtime environment |
 | Page Object Model | Framework architecture |
+| Centralized Locators | Shared selector architecture |
 | HTML Reports | Test reporting |
 
 ---
@@ -68,6 +68,8 @@ This project is continuously evolving as I keep learning and improving my QA Eng
 - Burger menu functionality
 - Reset app state validation
 - Sorting validation
+- Cart synchronization validation
+- Accessibility-oriented locator validation
 
 ### Product Details Testing
 
@@ -83,6 +85,13 @@ This project is continuously evolving as I keep learning and improving my QA Eng
 - Checkout validation errors
 - Missing required fields validation
 - Order completion verification
+- End-to-end checkout workflow
+
+### Navigation & Menu Testing
+
+- About page redirection validation
+- Burger menu interactions
+- Navigation link validations
 
 ---
 
@@ -90,6 +99,13 @@ This project is continuously evolving as I keep learning and improving my QA Eng
 
 ```text
 Frontend-Foundations
+│
+├── locators/
+│   ├── login.locators.ts
+│   ├── inventory.locators.ts
+│   ├── cart.locators.ts
+│   ├── checkout.locators.ts
+│   └── productDetails.locators.ts
 │
 ├── pages/
 │   ├── basePage.ts
@@ -103,7 +119,10 @@ Frontend-Foundations
 │   ├── login.spec.ts
 │   ├── home.spec.ts
 │   ├── items.spec.ts
-│   └── checkout.spec.ts
+│   ├── checkout.spec.ts
+│   ├── about.spec.ts
+│   ├── cart.spec.ts
+│   └── menu.spec.ts
 │
 ├── playwright.config.ts
 └── package.json
@@ -113,59 +132,150 @@ Frontend-Foundations
 
 ## Automation Architecture
 
-This framework follows the **Page Object Model (POM)** design pattern to improve:
+This framework follows the **Page Object Model (POM)** design pattern combined with centralized locator abstraction to improve:
 
 - maintainability
 - readability
 - scalability
 - reusability
+- selector consistency
 
-Each page has its own dedicated class containing:
+Each page contains:
 
-- locators
 - reusable actions
 - helper methods
-- assertions support
+- page-specific flows
+- assertion support
+
+Selectors are centralized in dedicated locator files to reduce duplication and simplify maintenance across the framework.
+
+---
+
+## Locator Abstraction Architecture
+
+The framework uses dedicated locator files to centralize selectors and standardize Playwright locator usage.
+
+This architecture helps:
+
+- reduce selector duplication
+- keep selectors consistent across Pages
+- simplify Page Object logic
+- improve scalability
+- make selector updates easier
+- standardize locator strategy
+
+Example:
+
+```ts
+export const loginLocators = {
+  usernameInput: 'Username',
+  passwordInput: 'Password',
+  loginButton: {
+    role: 'button',
+    name: 'Login',
+  },
+};
+```
+
+Pages consume centralized locators instead of redefining selectors repeatedly.
+
+---
+
+## Locator Architecture
+
+The framework uses dedicated `.locators.ts` files to centralize selectors and standardize locator usage across Page Objects.
+
+This architecture helps:
+
+- reduce selector duplication
+- improve selector consistency
+- simplify Page Object maintenance
+- separate selectors from page actions
+- improve scalability and readability
+
+Example:
+
+```ts
+export const loginLocators = {
+  usernameInput: {
+    role: 'textbox',
+    name: 'Username',
+  },
+
+  loginButton: {
+    role: 'button',
+    name: 'Login',
+  },
+};
+```
+
+Page Objects consume shared locators instead of redefining selectors repeatedly.
 
 ---
 
 ## Locator Strategy
 
-This framework follows Playwright best practices for stable selectors.
+The framework follows Playwright best practices for stable and maintainable selectors.
 
-Priority order used throughout the project:
+Preferred selector priority:
 
 ```text
-role/test-id → id → name → CSS → XPath
+Role → TestId → Id → Name → CSS → XPath
 ```
 
-Examples:
+The project prioritizes:
+
+- semantic Playwright locators
+- accessibility-aware selectors
+- resilient selector strategies
+- minimal brittle CSS selectors
+
+Preferred Playwright locators include:
 
 ```ts
 page.getByRole('button', { name: 'Login' })
 
 page.getByTestId('shopping-cart-link')
-
-page.getByPlaceholder('Username')
 ```
 
-XPath selectors are intentionally avoided to reduce brittleness and improve maintainability.
+CSS selectors are used only when semantic locators are unavailable.
+
+XPath selectors are intentionally avoided whenever possible to reduce brittleness and improve long-term maintainability.
+
+---
+
+## Framework Improvements
+
+Recent framework improvements include:
+
+- centralized locator abstraction layer
+- reusable locator architecture
+- reduced brittle CSS selectors
+- cleaner separation between locators and page actions
+- improved selector consistency
+- improved Page Object maintainability
+- accessibility-focused locator strategy
+- cleaner TypeScript structure
+- more stable end-to-end flows
 
 ---
 
 ## Best Practices Applied
 
 - Page Object Model (POM)
+- Dedicated locator abstraction files
 - Reusable methods
-- Centralized locators
-- Accessibility-friendly selectors
+- Centralized selectors
+- Accessibility-first automation approach
+- Semantic Playwright locators
 - Async/Await implementation
 - Minimal flaky selectors
-- Test isolation
 - Shared setup with beforeEach
 - Cross-browser configuration
 - Failure screenshots/traces/videos
 - Clean TypeScript typing
+- Separation of concerns
+- Reduced selector maintenance overhead
 
 ---
 
@@ -217,6 +327,8 @@ Current configuration supports:
 - Firefox
 - WebKit
 
+---
+
 ## What This Project Demonstrates
 
 This repository showcases my ability to:
@@ -229,9 +341,26 @@ This repository showcases my ability to:
 - improve test stability
 - structure real-world QE projects
 - apply modern QA Engineering principles
+- implement locator optimization strategies
+- create scalable locator abstraction systems
+- improve accessibility-aware automation
+
+---
+
+## Repository Purpose
+
+This repository functions as:
+
+- a learning platform
+- an automation playground
+- a professional QA portfolio project
+
+showcasing my growth in modern Front-End Quality Engineering and automation architecture.
+
+---
 
 ## Author
 
-Alexander Bocanegra
+Odin Jacques
 
 GitHub: https://github.com/OdinJacques
