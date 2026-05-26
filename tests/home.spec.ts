@@ -135,9 +135,7 @@ test.describe('Burguer menu', () => {
     await expect(page.getByRole('navigation')).not.toBeVisible();
   });
 
-  test('Reset App State: should remove cart badge when items are in cart', async ({
-    page,
-  }) => {
+  test('Reset App State: should remove cart badge when items are in cart', async () => {
     await inventoryPage.addProductToCartByIndex(0);
     await inventoryPage.addProductToCartByIndex(1);
     expect(await inventoryPage.getCartCount()).toBe(2);
