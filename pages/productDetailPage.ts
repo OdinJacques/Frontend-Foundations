@@ -1,5 +1,6 @@
-import { Page, Locator } from "@playwright/test";
-import { BasePage } from "./basePage";
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './basePage';
+import { productDetailPageLocators } from '../locators/productDetailPage.locators';
 
 export class ProductDetailPage extends BasePage {
   readonly productName: Locator;
@@ -13,14 +14,20 @@ export class ProductDetailPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.productName = page.getByTestId("inventory-item-name");
-    this.productDescription = page.getByTestId("inventory-item-desc");
-    this.productPrice = page.getByTestId("inventory-item-price");
-    this.productImage = page.locator(".inventory_details_img");
-    this.addToCartButton = page.locator('[data-test^="add-to-cart"]');
-    this.removeButton = page.locator('[data-test^="remove"]');
-    this.backToProductsButton = page.getByTestId("back-to-products");
-    this.cartBadge = page.getByTestId("shopping-cart-badge");
+    this.productName = page.locator(productDetailPageLocators.productName);
+    this.productDescription = page.locator(
+      productDetailPageLocators.productDescription
+    );
+    this.productPrice = page.locator(productDetailPageLocators.productPrice);
+    this.productImage = page.locator(productDetailPageLocators.productImage);
+    this.addToCartButton = page.locator(
+      productDetailPageLocators.addToCartButton
+    );
+    this.removeButton = page.locator(productDetailPageLocators.removeButton);
+    this.backToProductsButton = page.locator(
+      productDetailPageLocators.backToProductsButton
+    );
+    this.cartBadge = page.locator(productDetailPageLocators.cartBadge);
   }
 
   async goToById(id: number) {
@@ -28,15 +35,15 @@ export class ProductDetailPage extends BasePage {
   }
 
   async getName(): Promise<string> {
-    return (await this.productName.textContent()) ?? "";
+    return (await this.productName.textContent()) ?? '';
   }
 
   async getDescription(): Promise<string> {
-    return (await this.productDescription.textContent()) ?? "";
+    return (await this.productDescription.textContent()) ?? '';
   }
 
   async getPrice(): Promise<string> {
-    return (await this.productPrice.textContent()) ?? "";
+    return (await this.productPrice.textContent()) ?? '';
   }
 
   async addToCart() {

@@ -1,5 +1,6 @@
-import { Page, Locator } from "@playwright/test";
-import { BasePage } from "./basePage";
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './basePage';
+import { checkoutPageLocators } from '../locators/checkoutPage.locators';
 
 export class CheckoutPage extends BasePage {
   readonly firstNameInput: Locator;
@@ -20,29 +21,26 @@ export class CheckoutPage extends BasePage {
     super(page);
 
     // Step One
-    this.firstNameInput = page.getByTestId("firstName");
-    this.lastNameInput = page.getByTestId("lastName");
-    this.postalCodeInput = page.getByTestId("postalCode");
-
-    this.continueButton = page.getByTestId("continue");
-    this.cancelButton = page.getByTestId("cancel");
+    this.firstNameInput = page.locator(checkoutPageLocators.firstNameInput);
+    this.lastNameInput = page.locator(checkoutPageLocators.lastNameInput);
+    this.postalCodeInput = page.locator(checkoutPageLocators.postalCodeInput);
+    this.continueButton = page.locator(checkoutPageLocators.continueButton);
+    this.cancelButton = page.locator(checkoutPageLocators.cancelButton);
 
     // Step Two
-    this.finishButton = page.getByTestId("finish");
+    this.finishButton = page.locator(checkoutPageLocators.finishButton);
 
     // Complete
-    this.backHomeButton = page.getByTestId("back-to-products");
-
-    this.completeHeader = page.locator(".complete-header");
-    this.completeText = page.locator(".complete-text");
-
-    this.pageTitle = page.locator(".title");
+    this.backHomeButton = page.locator(checkoutPageLocators.backHomeButton);
+    this.completeHeader = page.locator(checkoutPageLocators.completeHeader);
+    this.completeText = page.locator(checkoutPageLocators.completeText);
+    this.pageTitle = page.locator(checkoutPageLocators.pageTitle);
   }
 
   async fillCheckoutInformation(
     firstName: string,
     lastName: string,
-    postalCode: string,
+    postalCode: string
   ) {
     await this.firstNameInput.fill(firstName);
     await this.lastNameInput.fill(lastName);

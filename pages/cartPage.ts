@@ -1,5 +1,6 @@
-import { Page, Locator } from "@playwright/test";
-import { BasePage } from "./basePage";
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './basePage';
+import { cartPageLocators } from '../locators/cartPage.locators';
 
 export class CartPage extends BasePage {
   readonly cartItems: Locator;
@@ -10,17 +11,17 @@ export class CartPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.checkoutButton = page.getByTestId("checkout");
-    this.continueShoppingButton = page.getByTestId("continue-shopping");
-    this.removeButtons = page.locator('[data-test^="remove"]');
-    this.cartItems = page.locator(
-      '[data-test="cart-contents-container"] .cart_item',
+    this.checkoutButton = page.locator(cartPageLocators.checkoutButton);
+    this.continueShoppingButton = page.locator(
+      cartPageLocators.continueShoppingButton
     );
-    this.pageTitle = page.locator(".title");
+    this.removeButtons = page.locator(cartPageLocators.removeButtons);
+    this.cartItems = page.locator(cartPageLocators.cartItems);
+    this.pageTitle = page.locator(cartPageLocators.pageTitle);
   }
 
   async goTo() {
-    await this.navigate("/cart.html");
+    await this.navigate('/cart.html');
   }
 
   async getCartItemCount(): Promise<number> {
@@ -28,24 +29,26 @@ export class CartPage extends BasePage {
   }
 
   async getItemNames(): Promise<string[]> {
-    return this.page.getByTestId("inventory-item-name").allTextContents();
+    return this.page.locator(cartPageLocators.productName).allTextContents();
   }
 
   async getItemPrices(): Promise<string[]> {
     const raw = await this.page
-      .getByTestId("inventory-item-price")
+      .locator(cartPageLocators.productPrice)
       .allTextContents();
-    return raw.map((price) => price.replace("$", ""));
+    return raw.map((price) => price.replace('$', ''));
   }
 
   async getItemQuantity(): Promise<number[]> {
-    const raw = await this.page.getByTestId("cart_quantity").allTextContents();
+    const raw = await this.page
+      .locator(cartPageLocators.cartQuantity)
+      .allTextContents();
     return raw.map((qty) => parseInt(qty));
   }
 
   async removeItemByName(name: string) {
-    const slug = name.toLowerCase().replace(/\s+/g, "-");
-    await this.page.getByTestId(`remove-${slug}`).click();
+    const slug = name.toLowerCase().replace(/\s+/g, '-');
+    await this.page.locator(`[data-test="remove-${slug}"]`).click();
   }
 
   async proceedToCheckout() {
