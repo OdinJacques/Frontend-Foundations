@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/OdinJacques/Frontend-Foundations#readme",
   "devDependencies": {
+    "@dotenvx/dotenvx": "^1.71.0",
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1"
   }
