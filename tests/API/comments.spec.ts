@@ -22,7 +22,11 @@ const postData = (userId: number): Posts => ({
   body: 'This is a sample post body for testing purposes.',
 });
 
-const commentData = (postId: number, name?: string, email?: string): Partial<Comments> => ({
+const commentData = (
+  postId: number,
+  name?: string,
+  email?: string
+): Partial<Comments> => ({
   post_id: postId,
   name: name,
   email: email,
@@ -86,7 +90,9 @@ test.describe('Comments testing', () => {
     expect(response.status()).toBe(200);
     const responseBody = await response.json();
     expect(responseBody.length).toBeGreaterThan(0);
-    expect(responseBody.some((c: { id: number }) => c.id === createdCommentId)).toBe(true);
+    expect(
+      responseBody.some((c: { id: number }) => c.id === createdCommentId)
+    ).toBe(true);
   });
 
   test('Create a comment with missing fields', async () => {
@@ -107,7 +113,6 @@ test.describe('Comments testing', () => {
         }),
       ])
     );
-    console.log('Error messages:\n', responseBody);
   });
 
   test('Create a comment with invalid post id', async () => {
@@ -124,7 +129,6 @@ test.describe('Comments testing', () => {
         }),
       ])
     );
-    console.log('Error message:\n', responseBody);
   });
 
   test('Get comments with invalid post id', async () => {

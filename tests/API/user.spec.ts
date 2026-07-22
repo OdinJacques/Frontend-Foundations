@@ -15,10 +15,10 @@ test.describe('User API Tests', () => {
   let createdUserId: number;
   const UserData: User = {
     name: Math.random().toString(36).substring(2, 15),
-    email: Math.random().toString(36).substring(2, 15) + "@example.com",
-    gender: "Male",
-    status: "Active"
-  }
+    email: Math.random().toString(36).substring(2, 15) + '@example.com',
+    gender: 'Male',
+    status: 'Active',
+  };
 
   test.beforeAll(async () => {
     apiContext = await playwright.request.newContext({

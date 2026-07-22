@@ -1,15 +1,15 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
-import { ProductDetailPage } from "../pages/productDetailPage";
-import { InventoryPage } from "../pages/inventoryPage";
-import { CartPage } from "../pages/cartPage";
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/loginPage';
+import { ProductDetailPage } from '../pages/productDetailPage';
+import { InventoryPage } from '../pages/inventoryPage';
+import { CartPage } from '../pages/cartPage';
 
-const VALID_USER = "standard_user";
-const VALID_PASS = "secret_sauce";
+const VALID_USER = 'standard_user';
+const VALID_PASS = 'secret_sauce';
 
 const PRODUCT_IDS = [0, 1, 2, 3, 4, 5];
 
-test.describe("Item / Product details", () => {
+test.describe('Item / Product details', () => {
   let detailPage: ProductDetailPage;
 
   test.beforeEach(async ({ page }) => {
@@ -20,27 +20,27 @@ test.describe("Item / Product details", () => {
     await detailPage.goToById(4);
   });
 
-  test("product name should be displayed", async () => {
+  test('product name should be displayed', async () => {
     await expect(detailPage.productName).toBeVisible();
     expect((await detailPage.getName()).trim().length).toBeGreaterThan(0);
   });
 
-  test("product description should be displayed", async () => {
+  test('product description should be displayed', async () => {
     await expect(detailPage.productDescription).toBeVisible();
     expect((await detailPage.getDescription()).trim().length).toBeGreaterThan(
-      0,
+      0
     );
   });
 
-  test("product price should be displayed and start with $", async () => {
+  test('product price should be displayed and start with $', async () => {
     await expect(detailPage.productPrice).toBeVisible();
     const price = await detailPage.getPrice();
     expect(price).toMatch(/^\$/);
   });
 
-  test("product image should be displayed", async () => {
+  test('product image should be displayed', async () => {
     await expect(detailPage.productImage).toBeVisible();
-    const src = await detailPage.productImage.getAttribute("src");
+    const src = await detailPage.productImage.getAttribute('src');
     expect(src).toBeTruthy();
   });
 
@@ -65,7 +65,7 @@ test.describe("Item / Product details", () => {
   });
 });
 
-test.describe("Navigation tests", () => {
+test.describe('Navigation tests', () => {
   let detailPage: ProductDetailPage;
 
   test.beforeEach(async ({ page }) => {
@@ -76,7 +76,7 @@ test.describe("Navigation tests", () => {
     await detailPage.goToById(4);
   });
 
-  test("clicking a product name on inventory page should navigate to product details page", async ({
+  test('clicking a product name on inventory page should navigate to product details page', async ({
     page,
   }) => {
     const inventoryPage = new InventoryPage(page);
@@ -85,17 +85,17 @@ test.describe("Navigation tests", () => {
     const firstProductName = names[0];
     await inventoryPage.clickProductByIndex(0);
     await expect(page).toHaveURL(/\/inventory-item\.html\?id=\d+/);
-    await expect(page.getByTestId("inventory-item-name")).toHaveText(
-      firstProductName,
+    await expect(page.getByTestId('inventory-item-name')).toHaveText(
+      firstProductName
     );
   });
 
-  test("clicking a product image on inventory page should navigate to product details page", async ({
+  test('clicking a product image on inventory page should navigate to product details page', async ({
     page,
   }) => {
     const inventoryPage = new InventoryPage(page);
     await inventoryPage.goto();
-    await page.getByTestId("inventory-item").first().getByRole("img").click();
+    await page.getByTestId('inventory-item').first().getByRole('img').click();
     await expect(page).toHaveURL(/\/inventory-item\.html\?id=\d+/);
   });
 
@@ -105,13 +105,13 @@ test.describe("Navigation tests", () => {
     }) => {
       await detailPage.goToById(id);
       await expect(page).toHaveURL(
-        new RegExp(`/inventory-item\\.html\\?id=${id}`),
+        new RegExp(`/inventory-item\\.html\\?id=${id}`)
       );
       expect((await detailPage.getName()).trim().length).toBeGreaterThan(0);
     });
   }
 
-  test("adding an item to the cart should update the cart count", async ({
+  test('adding an item to the cart should update the cart count', async ({
     page,
   }) => {
     await detailPage.addToCart();
@@ -120,7 +120,7 @@ test.describe("Navigation tests", () => {
     expect(await inventoryPage.getCartCount()).toBe(1);
   });
 
-  test("removing an item from the cart should update the cart count", async ({
+  test('removing an item from the cart should update the cart count', async ({
     page,
   }) => {
     await detailPage.addToCart();
@@ -138,7 +138,7 @@ test.describe("Navigation tests", () => {
   });
 });
 
-test.describe("Cart interactions from details page", () => {
+test.describe('Cart interactions from details page', () => {
   let detailPage: ProductDetailPage;
 
   test.beforeEach(async ({ page }) => {
@@ -149,14 +149,14 @@ test.describe("Cart interactions from details page", () => {
     await detailPage.goToById(4);
   });
 
-  test("add to cart should show Remove button and update badge count", async () => {
+  test('add to cart should show Remove button and update badge count', async () => {
     await detailPage.addToCart();
     await expect(detailPage.removeButton).toBeVisible();
     await expect(detailPage.addToCartButton).toBeHidden();
     expect(await detailPage.getCartCount()).toBe(1);
   });
 
-  test("remove from cart should show Add to cart button and update badge count", async () => {
+  test('remove from cart should show Add to cart button and update badge count', async () => {
     await detailPage.addToCart();
     await detailPage.removeFromCart();
     await expect(detailPage.addToCartButton).toBeVisible();
@@ -164,17 +164,17 @@ test.describe("Cart interactions from details page", () => {
     expect(await detailPage.getCartCount()).toBe(0);
   });
 
-  test("cart badge should disappear after removing the only item", async () => {
+  test('cart badge should disappear after removing the only item', async () => {
     await detailPage.addToCart();
     await detailPage.removeFromCart();
     // cartBadge is getByTestId('shopping-cart-badge') rank-1
     await expect(detailPage.cartBadge).toBeHidden();
   });
 
-  test("added item should be visible in the cart page", async ({ page }) => {
+  test('added item should be visible in the cart page', async ({ page }) => {
     const name = await detailPage.getName();
     await detailPage.addToCart();
-    await page.getByTestId("shopping-cart-link").click();
+    await page.getByTestId('shopping-cart-link').click();
     const cartPage = new CartPage(page);
     const cartNames = await cartPage.getItemNames();
     expect(cartNames).toContain(name);

@@ -19,7 +19,7 @@ export class BasePage {
   }
 
   async navigate(path: string = '') {
-    await this.page.goto(`https://www.saucedemo.com${path}`);
+    await this.page.goto(path);
   }
 
   async getTitle(): Promise<string> {

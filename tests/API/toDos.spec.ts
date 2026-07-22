@@ -67,7 +67,9 @@ test.describe('ToDos testing', () => {
     expect(response.status()).toBe(200);
     const responseBody = await response.json();
     expect(responseBody.length).toBeGreaterThan(0);
-    expect(responseBody.some((t: { id: number }) => t.id === createdToDoId)).toBe(true);
+    expect(
+      responseBody.some((t: { id: number }) => t.id === createdToDoId)
+    ).toBe(true);
   });
 
   test('Create ToDo with invalid user id', async () => {

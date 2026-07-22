@@ -1,3 +1,3 @@
 export type LocatorObj = {
-    readonly [key: string]: string;
-}
+  readonly [key: string]: string;
+};
