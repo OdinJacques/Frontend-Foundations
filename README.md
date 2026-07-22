@@ -39,15 +39,15 @@ This project continuously evolves as I improve my QA Engineering and automation 
 
 ## Tech Stack
 
-| Technology | Purpose |
-|---|---|
-| TypeScript | Main programming language |
-| Playwright | End-to-End and API automation |
-| Node.js | Runtime environment |
-| Dotenvx | Environment variable management |
-| Page Object Model | Framework architecture |
-| Centralized Locators | Shared selector architecture |
-| HTML Reports | Test reporting |
+| Technology           | Purpose                         |
+| -------------------- | ------------------------------- |
+| TypeScript           | Main programming language       |
+| Playwright           | End-to-End and API automation   |
+| Node.js              | Runtime environment             |
+| Dotenvx              | Environment variable management |
+| Page Object Model    | Framework architecture          |
+| Centralized Locators | Shared selector architecture    |
+| HTML Reports         | Test reporting                  |
 
 ---
 
@@ -237,11 +237,11 @@ The project prioritizes:
 Example locators:
 
 ```ts
-page.getByRole('button', { name: 'Login' })
+page.getByRole('button', { name: 'Login' });
 
-page.getByTestId('shopping-cart-link')
+page.getByTestId('shopping-cart-link');
 
-page.locator('[data-test="inventory-item-name"]')
+page.locator('[data-test="inventory-item-name"]');
 ```
 
 XPath selectors are intentionally avoided to reduce brittleness and improve long-term maintainability.
@@ -254,12 +254,12 @@ The framework includes a dedicated REST API test suite targeting the [GoRest pub
 
 ### API Test Coverage
 
-| Suite | File | Description |
-|---|---|---|
-| Users | `tests/API/user.spec.ts` | Full CRUD + validation |
-| Posts | `tests/API/posts.spec.ts` | Post creation and retrieval |
+| Suite    | File                         | Description                 |
+| -------- | ---------------------------- | --------------------------- |
+| Users    | `tests/API/user.spec.ts`     | Full CRUD + validation      |
+| Posts    | `tests/API/posts.spec.ts`    | Post creation and retrieval |
 | Comments | `tests/API/comments.spec.ts` | Comment management on posts |
-| ToDos | `tests/API/toDos.spec.ts` | Task creation and status |
+| ToDos    | `tests/API/toDos.spec.ts`    | Task creation and status    |
 
 ### TypeScript Interfaces
 

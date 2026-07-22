@@ -106,7 +106,6 @@ test.describe('Home / Inventory Page', () => {
   });
 });
 
-
 test.describe('Burguer menu', () => {
   let inventoryPage: InventoryPage;
 
@@ -125,7 +124,7 @@ test.describe('Burguer menu', () => {
     await expect(page.getByRole('link', { name: 'About' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Logout' })).toBeVisible();
     await expect(
-      page.getByRole('link', { name: 'Reset App State' }),
+      page.getByRole('link', { name: 'Reset App State' })
     ).toBeVisible();
   });
 
@@ -165,7 +164,7 @@ test.describe('Burguer menu', () => {
     await inventoryPage.resetAppState();
     await inventoryPage.goToCart();
     await expect(
-      page.locator('[data-test="cart-contents-container"] .cart_item'),
+      page.locator('[data-test="cart-contents-container"] .cart_item')
     ).toHaveCount(0);
   });
 
@@ -174,7 +173,6 @@ test.describe('Burguer menu', () => {
     await expect(page).toHaveURL(/.*inventory/);
   });
 });
-
 
 test.describe('Sorting products', () => {
   let inventoryPage: InventoryPage;
@@ -210,5 +208,4 @@ test.describe('Sorting products', () => {
     const prices = await inventoryPage.getProductPrices();
     expect(prices).toEqual([...prices].sort((a, b) => b - a));
   });
-
 });

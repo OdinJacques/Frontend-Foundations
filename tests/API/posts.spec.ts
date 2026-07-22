@@ -2,11 +2,19 @@ import { test, expect, APIRequestContext } from '@playwright/test';
 import playwright from 'playwright';
 import * as dotenv from 'dotenv';
 import { Posts } from '../../Interface/post';
-import { userData } from '../../dataApi/user';
+import { User } from '../../Interface/user';
 dotenv.config();
 
 const baseURL = process.env.baseURL;
 const token = process.env.token;
+
+const userData: User = {
+  name: Math.random().toString(36).substring(2, 15),
+  email: Math.random().toString(36).substring(2, 15) + '@example.com',
+  gender: 'male',
+  status: 'active',
+};
+
 const postData = (userId: number): Posts => ({
   user_id: userId,
   title: 'Sample Post Title',
@@ -72,7 +80,6 @@ test.describe('Posts testing', () => {
         }),
       ])
     );
-    console.log('Error message:\n', responseBody);
   });
 
   test('Create post with missing title', async () => {
@@ -92,7 +99,6 @@ test.describe('Posts testing', () => {
         }),
       ])
     );
-    console.log('Error message:\n', responseBody);
   });
 
   test('Create post with missing body', async () => {
@@ -112,6 +118,5 @@ test.describe('Posts testing', () => {
         }),
       ])
     );
-    console.log('Error message:\n', responseBody);
   });
 }); //end of describe block
